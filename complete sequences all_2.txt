@@ -1,0 +1,47 @@
+# -*- encoding=utf-8 -*-
+# 作者：Elena
+# 时间：2022-01-10 11:02
+
+#下载sequence都放入一个txt文件
+
+denluhao=open('denluhao.txt','r')
+str1=denluhao.readlines()
+
+import time
+import requests
+import re
+import os
+
+def download(name):
+    url_text='https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?tool=portal&save=file&log$=seqview&db=nuccore&report=fasta&id='
+    url_text_terminal=url_text + name + '&extrafeat=null&conwithfeat=on&hide-cdd=on'
+
+    response4=requests.get(url_text_terminal)
+    # print(type(response4))
+    response5=response4.content.decode('utf-8')
+    # print(response5)
+    # print(type(response5))
+    return response5
+
+
+book1 = ''
+
+for name_1 in str1:
+    name=name_1.splitlines()[0]
+
+    book1 = book1 + download(name)
+    print('%s已下载完成' % name)
+
+book2 = open('sequcences642.txt','w+',encoding='utf-8')
+book2.write(book1)
+book2.close()
+
+
+
+
+
+
+
+
+denluhao.close()
+
