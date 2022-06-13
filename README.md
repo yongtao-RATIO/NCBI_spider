@@ -1,4 +1,3 @@
-# sequence_NCBI_spider
 # Here's a spider code for ncbi sequences using python
 
 We upload two codes:"complete sequences all.txt" and "complete sequences all_2.txt", you can choose each one in using(for example, once you found it's slow in using ~.txt, you could choose ~2.txt)
