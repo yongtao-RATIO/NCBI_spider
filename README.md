@@ -1,12 +1,19 @@
-# Here's a spider code for ncbi sequences using python
+# Here's a spider code for ncbi using python
 
-We upload two codes:"complete sequences all.txt" and "complete sequences all_2.txt", you can choose each one in using(for example, once you found it's slow in using ~.txt, you could choose ~2.txt)
+# sequences' spider
+We upload two files "complete sequences all.txt" and "complete sequences all_2.txt". You can choose either for spidering.(For example, once you found it's slow in using ~.txt, you could choose ~2.txt.)
 
+workflow:
+1. Create a txt formart file in which the accesssions written down by lines, such as "denluhao.txt"
+2. Put all files above in a same project and directory
+3. Copy the codes in python IDE, then running
 
-# workflow:
+# metadata's spider
+There're two files called "genbankxlmt.txt" and "genbankxlmt2.txt". You can choose either for spidering.(For example, once you found it's slow in using ~.txt, you could choose ~2.txt.)
 
-you need to create a txt formart file in which the accesssins written down by lines,such as "denluhao.txt"
-
-and you should put all files above in one project, one directory
-
-then copy the codes in python IDE, and running
+workflow:
+1. Create a txt formart file in which the accesssions written down by lines, such as "accession.txt"
+2. Put all files above in a same project and directory
+3. Copy the codes in python IDE
+4. Change the range-i by the number of accession in function-saveDATA(datalist)
+5. Run
