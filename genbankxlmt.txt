@@ -1,0 +1,165 @@
+# -*- encoding=utf-8 -*-
+# 作者：Elena
+# 时间：2021-10-12 14:19
+
+
+#输入accession,返回metadata文件
+
+import requests
+import re
+import xlwt
+
+
+def download(name):
+    url_text='https://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?id='
+    url3='https://www.ncbi.nlm.nih.gov/nuccore/' + name
+    response3=requests.get(url3)
+    html=response3.content.decode('utf-8')
+    urls=re.findall(r'<meta name="ncbi_uidlist" content=".*?" />',html)
+    id_haoma=urls[0].split(sep='"')[-2]
+    url_text_terminal=url_text + id_haoma
+
+    response4=requests.get(url_text_terminal)
+    vir1 = response4.content.decode('utf-8')
+
+    return DATAlist(vir1)
+
+
+
+
+def strainname1(vir1):
+    strain1 = re.findall(r'/strain=".*?"', vir1)
+    if strain1 == []:
+        strain2 = ''
+    else:
+        strain2 = strain1[0].split(sep='"')[-2]
+
+    return strain2
+
+
+def strainname2(vir1):
+    isolate1 = re.findall(r'/isolate=".*?"', vir1)
+    if isolate1 == []:
+        isolate2 = ''
+    else:
+        isolate2 = isolate1[0].split(sep='"')[-2]
+
+    return isolate2
+
+
+def VirusType(vir1):
+    organism1 = re.findall(r'/organism=".*?"', vir1)
+    if organism1 == []:
+        organism2 = ''
+    else:
+        organism2 = organism1[0].split(sep='"')[-2]
+
+    return organism2
+
+
+def GenBankAccession(vir1):
+    accession1 = re.findall(r'ACCESSION\s\s\s.*', vir1)
+    accession2 = accession1[0].split(sep=' ')[-1]
+
+    return accession2
+
+
+def SequenceLength(vir1):
+    sequence1 = re.findall(r'.*\sbp', vir1)
+    if sequence1 == []:
+        sequence2 = ''
+    else:
+        sequence2 = sequence1[0].split(sep=r' ')[-2]
+
+    return sequence2
+
+
+def CollectionDate(vir1):
+    collection_date1 = re.findall(r'/collection_date=".*?"', vir1)
+    if collection_date1 == []:
+        collection_date2 = '-N/A-'
+    else:
+        collection_date2 = collection_date1[0].split(sep='"')[-2]
+
+    return collection_date2
+
+
+def hostandgenbankhost(vir1):
+    genbankhost1 = re.findall(r'/host=".*?"', vir1)
+    if genbankhost1 == []:
+        genbankhost2 = '-N/A-'
+    else:
+        genbankhost2 = genbankhost1[0].split(sep='"')[-2]
+
+    if genbankhost2 == 'Homo sapiens':
+        host1 = 'Human'
+    else:
+        host1 = 'Unknown'
+
+    return host1,genbankhost2
+
+
+def country(vir1):
+    country1 = re.findall(r'/country=".*?"', vir1)
+    if country1 == []:
+        country2 = '-N/A-'
+    else:
+        country2 = country1[0].split(sep='"')[-2]
+
+    return country2
+
+
+def MolType(vir1):
+    mol_type1 = re.findall(r'/mol_type=".*?"', vir1)
+    mol_type2 = mol_type1[0].split(sep='"')[-2]
+
+    return mol_type2
+
+def DATAlist(vir1):
+    datalist1=[
+        strainname1(vir1),
+        strainname2(vir1),
+        VirusType(vir1),
+        GenBankAccession(vir1),
+        SequenceLength(vir1),
+        CollectionDate(vir1),
+        hostandgenbankhost(vir1)[0],
+        hostandgenbankhost(vir1)[1],
+        country(vir1),
+        MolType(vir1)
+    ]
+
+    return datalist1
+
+
+
+
+def saveDATA(datalist):
+    book1 = xlwt.Workbook(encoding='utf-8',style_compression=0)
+    sheet1 = book1.add_sheet('sheet1',cell_overwrite_ok=True)
+    col = ('Strain Name1','Isolate Name2','Virus Type','GenBank Accession','Sequence Length','Collection Date','Host','GenBank Host','Country','Mol Type')
+    for j in range(0,10):
+        sheet1.write(0,j,col[j])
+    for i in range(0,300):
+        print('第%d条'%(i+1))
+        data1=datalist[i]
+        for j in range(0,10):
+            sheet1.write(i+1,j,data1[j])
+
+    book1.save('student300.xls')
+
+
+
+datalist = []
+bookviru=open('accession.txt','r')
+namelist=bookviru.readlines()
+
+for name_1 in namelist:
+    name=name_1.splitlines()[0]
+    datalist.append(download(name))
+print(datalist)
+
+
+saveDATA(datalist)
+
+bookviru.close()
