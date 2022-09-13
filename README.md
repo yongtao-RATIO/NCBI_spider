@@ -1,4 +1,4 @@
-# Spider for ncbi using python
+# Spider for NCBI using python
 
 # sequences' spider
 We upload two files "complete sequences all.txt" and "complete sequences all_2.txt". You can choose either for spidering.(For example, once you found it's slow in using ~.txt, you could choose ~2.txt.)
